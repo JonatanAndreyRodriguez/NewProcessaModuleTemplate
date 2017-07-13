@@ -1,0 +1,2 @@
+[1.0.0] - <%=$PLASTER_Date%>  (<%=$PLASTER_PARAM_ModuleAuthor%>)
+Versión inicial.
