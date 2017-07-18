@@ -1,0 +1,30 @@
+{
+    "version": "0.1.0",
+    "command": "powershell",
+    "args": [],
+    "suppressTaskName": true,
+    "tasks": [{
+            "taskName": "Build Docs",
+            "showOutput": "silent",
+            "args": [
+                "powershell",
+                "-ExecutionPolicy",
+                "Unrestricted",
+                "-NoProfile",
+                "-File",
+                "${cwd}/Docs/Invoke-Build.ps1"
+            ]
+        },
+        {
+            "taskName": "Build Installer",
+            "showOutput": "always",
+            "args": [
+                "-ExecutionPolicy",
+                "Unrestricted",
+                "-NoProfile",
+                "-File",
+                "${cwd}/Installer/Create-Installer.ps1"
+            ]
+        }
+    ]
+}
