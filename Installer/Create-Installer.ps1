@@ -1,13 +1,13 @@
 <#===================================================================
-1. Ejecute este script desde una línea de comandos de PowerShell estando ubicado en la carpeta contenedora del propio script (Installer).
-1.1 En la carpeta Installer\Release se copiaran los archivos que componen el módulo de PowerShell (binarios y de texto).
-1.2 Si necesita "emular" el estado final del módulo cárguelo desde esta carpeta. Estos son los archivos que se van a incluir en los instaladores.
+1. Ejecute este script desde una lÃ­nea de comandos de PowerShell estando ubicado en la carpeta contenedora del propio script (Installer).
+1.1 En la carpeta Installer\Release se copiaran los archivos que componen el mÃ³dulo de PowerShell (binarios y de texto).
+1.2 Si necesita "emular" el estado final del mÃ³dulo cÃ¡rguelo desde esta carpeta. Estos son los archivos que se van a incluir en los instaladores.
 
 # Archivos resultantes:
-En la carpeta Installer se creará el archivo nuget que permite publicar el módulo en ProGet.
+En la carpeta Installer se crearÃ¡ el archivo nuget que permite publicar el mÃ³dulo en ProGet.
 
 2 Publique el archivo nupkg resultante en el Feed de PowerShell del servidor ProGet interno en http://10.100.102.22:8020
-2.1 También puede utilizar el parámetro $Publish del script para publicar en ProGet de forma automática.
+2.1 TambiÃ©n puede utilizar el parÃ¡metro $Publish del script para publicar en ProGet de forma automÃ¡tica.
 
 NOTA: Omita los mensajes de advertencia que se generan cuando se crea el archivo nupkg (Paso 9).
 ===================================================================#>
@@ -36,7 +36,7 @@ Import-Module PSProcessa -Force
 try {
 
     ###############################################
-    #NOTA: Coloque aquí el número de versión del módulo.
+    #NOTA: Coloque aquÃ­ el nÃºmero de versiÃ³n del mÃ³dulo.
     #Formato:  Major, Minor, Build, Revision
     ###############################################
     $VersionFormat = '1.0.{0}.{1}'
@@ -48,7 +48,7 @@ try {
     }
 
     ###############################################
-    #Paso 1: Crear la carpeta Release (allí se dejaran todos los archivos que componen el m??o).
+    #Paso 1: Crear la carpeta Release (allÃ­ se dejaran todos los archivos que componen el m??o).
     ###############################################
     $DestinationPath = Join-Path -Path "$PSScriptRoot" -ChildPath 'Release'
     "Remove directory $DestinationPath" | Write-Info
@@ -58,14 +58,14 @@ try {
 
 
     ###############################################
-    #Paso 2: Copiar todos los archivos binarios que componen el módulo (Post-Build del proyecto con la dll los deja en esta carpeta).
+    #Paso 2: Copiar todos los archivos binarios que componen el mÃ³dulo (Post-Build del proyecto con la dll los deja en esta carpeta).
     ###############################################
     $BinSource = Resolve-Path -Path (Join-Path -Path "$PSScriptRoot" -ChildPath '..\bin\')
     'Copy bin folder' | Write-Info
     Copy-Item -Path $BinSource.Path -Destination $DestinationPath -Recurse -Force
 
     ###############################################
-    #Paso 3: Copiar todos los archivos de PowerShell que componen el módulo (diferentes a binarios). La raíz del módulo.
+    #Paso 3: Copiar todos los archivos de PowerShell que componen el mÃ³dulo (diferentes a binarios). La raÃ­z del mÃ³dulo.
     ###############################################
     'Copy PowerShell files' | Write-Info
     $RootModulePath = Resolve-Path -Path (Join-Path -Path "$PSScriptRoot" -ChildPath '..')
@@ -95,7 +95,7 @@ try {
     }
 	
     ###############################################
-    #Paso 4: Determinar la versión del módulo.
+    #Paso 4: Determinar la versiÃ³n del mÃ³dulo.
     ###############################################
     $EpochDate = Get-Date -Year 2000 -Month 1 -Day 1 -Hour 0 -Minute 0 -Second 0
     $Build = ((Get-Date) - $EpochDate).TotalDays.ToString('F0')
@@ -104,8 +104,8 @@ try {
 	"Version: $Version" | Write-Info
 
     ###############################################
-    #Paso 5: Reemplazar el número de versión en el archivo de instalación de Nuget.
-    #Paso 5.1: Reemplazar el número de versión en el archivo psd1
+    #Paso 5: Reemplazar el nÃºmero de versiÃ³n en el archivo de instalaciÃ³n de Nuget.
+    #Paso 5.1: Reemplazar el nÃºmero de versiÃ³n en el archivo psd1
     ###############################################
     $NugetFilePath = Resolve-Path -Path (Join-Path -Path $PSScriptRoot -ChildPath '<%=$PLASTER_PARAM_ModuleName%>.nuspec') 
     $NewVersion = "<version>$Version</version>"
@@ -116,7 +116,7 @@ try {
     $ManifestContent = Get-Content -Raw -Path $PSManifestFile
     $RegexOptions = [System.Text.RegularExpressions.RegexOptions]::Multiline -bor [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
 	$ModuleVersionRegex = [Regex]::new("^(\t+|\s+)ModuleVersion.*={1}.*[0-9]+.*$", $RegexOptions)
-    $ReplaceText = "ModuleVersion = '{0}" -f $Version
+    $ReplaceText = "ModuleVersion = '{0}'" -f $Version
     $ModuleVersionRegex.Replace($ManifestContent, $ReplaceText).Trim() | Out-File -FilePath $PSManifestFile -Encoding Default
 
     ###############################################
@@ -128,7 +128,7 @@ try {
     Invoke-Expression -Command $CompileNugetCommand
 
     ###############################################
-    #Paso 7: Eliminar el indicador de configuración establecida y escribir los valores predeterminados de configuración.
+    #Paso 7: Eliminar el indicador de configuraciÃ³n establecida y escribir los valores predeterminados de configuraciÃ³n.
     ###############################################
     $AppConfigFile = Resolve-Path -Path (Join-Path -Path $PSScriptRoot -ChildPath 'Release\<%=$PLASTER_PARAM_ModuleName%>.config') 
     Remove-AppSetting -p $AppConfigFile -Key 'configured'
@@ -139,15 +139,15 @@ try {
     #Paso 8: Publicar en ProGet.
     ###############################################
 	
-	# ¿De donde viene este valor? 
+	# Â¿De donde viene este valor? 
 	# http://10.100.102.22:8020/administration/feeds/manage-feed?feedId=5
 	$ProGetApiKey = 'bc3401ac-c269-4b77-8b12-f88398600043'
 
 
-	# ¿De donde viene este valor? 
-	# Línea de comandos: nuget source list
-	# ¿Cómo se configura este valor? 
-	# Línea de comandos: nuget source add -Name "Processa GT" -Source "http://10.100.102.22:8020/nuget/PowerShell"
+	# Â¿De donde viene este valor? 
+	# LÃ­nea de comandos: nuget source list
+	# Â¿CÃ³mo se configura este valor? 
+	# LÃ­nea de comandos: nuget source add -Name "Processa GT" -Source "http://10.100.102.22:8020/nuget/PowerShell"
 	$NugetSourceName = 'Processa GT'
 
 	$PackageFilePath = Join-Path -Path $PSScriptRoot -ChildPath ('<%=$PLASTER_PARAM_ModuleName%>.{0}.nupkg' -f $Version)	
