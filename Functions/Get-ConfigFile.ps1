@@ -1,5 +1,5 @@
 function Get-ConfigFile {
-    <#
+<#
 .SYNOPSIS
 Obtiene la ruta de acceso del archivo de configuración.
 
@@ -25,23 +25,21 @@ Autor: Atorrest
     Param
     (
         [Parameter(Mandatory, ValueFromPipeline)]
-        [string]
+        [ValidateScript( { Test-Path -Path $_ -PathType Leaf })]
         $Path
     )
 
     try {
-        if (Test-Path -Path $Path) {
 
-            $Extension = [System.IO.Path]::GetExtension($Path)
-            $DebugFile = [System.IO.Path]::ChangeExtension($Path, '.Debug{0}' -f $Extension)
+        $Extension = [System.IO.Path]::GetExtension($Path)
+        $DebugFile = [System.IO.Path]::ChangeExtension($Path, '.Debug{0}' -f $Extension)
 
-            if (Test-Path -Path $DebugFile -PathType Leaf) {
-                $DebugFile | Write-Output
-                return
-            }
-
-            $Path | Write-Output
+        if (Test-Path -Path $DebugFile -PathType Leaf) {
+            $DebugFile | Write-Output
+            return
         }
+
+        $Path | Write-Output
     }
     catch {
         throw
