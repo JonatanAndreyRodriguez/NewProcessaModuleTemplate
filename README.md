@@ -1,6 +1,8 @@
 # NewProcessaModuleTemplate
 Plantilla de proyecto de Plaster para módulos de PowerShell
 
+![Curent release](https://img.shields.io/badge/version-1.0.2-f39f37.svg)
+
 ## Uso
 
 1. Instalar el módulo Plaster
