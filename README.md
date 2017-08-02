@@ -18,5 +18,7 @@ Import-Module Plaster
 3. Crear un proyecto utilizando la plantilla
 
 ```powershell
-Invoke-Plaster -TemplatePath 'YourFolderTemplate' -DestinationPath 'YourFolderDestination'
+$MyFolderTemplate = 'RutaCarpetaDondeDescomprimioPlantilla'
+# La ruta de la carpeta donde está el archivo PlasterManifest.xml
+Invoke-Plaster -TemplatePath $MyFolderTemplate -DestinationPath 'YourFolderDestination'
 ```
