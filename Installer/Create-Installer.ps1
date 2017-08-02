@@ -32,14 +32,13 @@ function Write-Info {
 }
 
 Import-Module PSProcessa -Force
+Import-Module ..\<%=$PLASTER_PARAM_ModuleName%> -Force
 
 try {
 
-    ###############################################
-    #NOTA: Coloque aquí el número de versión del módulo.
-    #Formato:  Major, Minor, Build, Revision
-    ###############################################
-    $VersionFormat = '1.0.{0}.{1}'
+    $ModuleVersion = (Get-Module -Name <%=$PLASTER_PARAM_ModuleName%>).Version.ToString().Substring(0,4)
+    $VersionFormat =  $ModuleVersion  + '{0}.{1}'
+
 
     $NugetPath = $env:NUGET_PATH
     if (-not $NugetPath) {
@@ -99,9 +98,9 @@ try {
     ###############################################
     $EpochDate = Get-Date -Year 2000 -Month 1 -Day 1 -Hour 0 -Minute 0 -Second 0
     $Build = ((Get-Date) - $EpochDate).TotalDays.ToString('F0')
-	$Revision = ((Get-Date) - $EpochDate).TotalSeconds.ToString('F0')    
+    $Revision = ((Get-Date) - (Get-Date).Date).TotalSeconds.ToString('F0')
     $Version = $VersionFormat -f $Build, $Revision
-	"Version: $Version" | Write-Info
+    "Version: $Version" | Write-Info
 
     ###############################################
     #Paso 5: Reemplazar el número de versión en el archivo de instalación de Nuget.
