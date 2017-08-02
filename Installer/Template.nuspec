@@ -24,5 +24,6 @@
 		<file src="Release\<%=$PLASTER_PARAM_ModuleName%>.psm1"/>
 		<file src="Release\ReleaseNotes.txt"/>
 		<file src="Release\Startup.ps1"/>
+		<file src="Release\Config.psd1"/>
 	</files>
 </package>
