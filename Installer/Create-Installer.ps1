@@ -139,14 +139,14 @@ try {
     ###############################################
 	
 	# ¿De donde viene este valor? 
-	# http://10.100.102.22:8020/administration/feeds/manage-feed?feedId=5
+	# http://proget/administration/feeds/manage-feed?feedId=5
 	$ProGetApiKey = 'bc3401ac-c269-4b77-8b12-f88398600043'
 
 
 	# ¿De donde viene este valor? 
 	# Línea de comandos: nuget source list
 	# ¿Cómo se configura este valor? 
-	# Línea de comandos: nuget source add -Name "Processa GT" -Source "http://10.100.102.22:8020/nuget/PowerShell"
+	# Línea de comandos: nuget source add -Name "Processa GT" -Source "http://proget/nuget/PowerShell"
 	$NugetSourceName = 'Processa GT'
 
 	$PackageFilePath = Join-Path -Path $PSScriptRoot -ChildPath ('<%=$PLASTER_PARAM_ModuleName%>.{0}.nupkg' -f $Version)	
