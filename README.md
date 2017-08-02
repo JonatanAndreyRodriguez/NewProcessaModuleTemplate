@@ -23,6 +23,6 @@ $MyFolderTemplate = 'RutaCarpetaDondeDescomprimioPlantilla'
 Invoke-Plaster -TemplatePath $MyFolderTemplate -DestinationPath 'YourFolderDestination'
 ```
 
-==========================
+--------------
 
 [About Plaster](https://github.com/PowerShell/Plaster)
