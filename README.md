@@ -22,3 +22,7 @@ $MyFolderTemplate = 'RutaCarpetaDondeDescomprimioPlantilla'
 # La ruta de la carpeta donde está el archivo PlasterManifest.xml
 Invoke-Plaster -TemplatePath $MyFolderTemplate -DestinationPath 'YourFolderDestination'
 ```
+
+==========================
+
+[About Plaster](https://github.com/PowerShell/Plaster)
