@@ -42,6 +42,7 @@
 	<file source='.vscode\tasks.json' destination='.vscode\tasks.json'/>
 	
 	<templateFile source='Template.config' destination='${PLASTER_PARAM_ModuleName}.config'/>
+	<templateFile source='Template.config' destination='${PLASTER_PARAM_ModuleName}.Debug.config'/>
 	<templateFile source='Template.psm1' destination='${PLASTER_PARAM_ModuleName}.psm1'/>	
 	<templateFile source='Template.psd1' destination='${PLASTER_PARAM_ModuleName}.psd1'/>	
 	
