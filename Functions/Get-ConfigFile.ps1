@@ -1,10 +1,10 @@
 function Get-ConfigFile {
 <#
 .SYNOPSIS
-Obtiene la ruta de acceso del archivo de configuraciÃ³n.
+Obtiene la ruta de acceso del archivo de configuración.
 
 .DESCRIPTION
-Si existiera un archivo Debug se devuelve la ruta de ese archivo. De lo contrario se utliza la ruta predeterminada.
+Si el archivo de configuración especificado no existe, se crea.
 
 .PARAMETER Path
 Ruta de acceso predeterminada del archivo.
@@ -13,9 +13,7 @@ Ruta de acceso predeterminada del archivo.
 'C:\MyConfig.config' | Get-ConfigFile
 
 .OUTPUTS
-Ruta de acceso en -Path o un archivo con el nombre .Debug si existiera.
-'C:\MyConfig.config' | Get-ConfigFile
-'C:\MyConfig.Debug.config' si existiera, de lo contrario 'C:\MyConfig.config'
+Ruta de acceso del archivo de confoguración.
 
 .NOTES
 Autor: Atorrest
@@ -25,24 +23,23 @@ Autor: Atorrest
     Param
     (
         [Parameter(Mandatory, ValueFromPipeline)]
-        [ValidateScript( { Test-Path -Path $_ -PathType Leaf })]
         $Path
     )
 
-    try {
+    $ConfigPath = Get-ConfigPath -Path $Path
 
-        $Extension = [System.IO.Path]::GetExtension($Path)
-        $DebugFile = [System.IO.Path]::ChangeExtension($Path, '.Debug{0}' -f $Extension)
-
-        if (Test-Path -Path $DebugFile -PathType Leaf) {
-            $DebugFile | Write-Output
-            return
-        }
-
-        $Path | Write-Output
+    if (-not (Test-Path -Path $ConfigPath -PathType 'Leaf')) {
+@"
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <connectionStrings>
+  </connectionStrings>
+  <appSettings>
+  </appSettings>
+</configuration>
+"@ | Set-Content -Path $ConfigPath -Encoding 'UTF8' -ErrorAction Stop
     }
-    catch {
-        throw
-    }
+
+    $ConfigPath | Write-Output
+
 }
-

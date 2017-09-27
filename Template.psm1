@@ -27,7 +27,6 @@ try {
 
     "Importing Resources from $PSScriptRoot\Resources" | Write-Verbose
 	$Script:Resx = Import-LocalizedData -BaseDirectory "$PSScriptRoot\Resources" -FileName 'Resources'
-    ("$PSScriptRoot\<%=$PLASTER_PARAM_ModuleName%>.config" | Get-ConfigFile) | Write-Verbose
 	$Script:AppConfig = "$PSScriptRoot\<%=$PLASTER_PARAM_ModuleName%>.config" | Get-ConfigFile
 
     # Procesar el archivo de inicialización (si existiera).

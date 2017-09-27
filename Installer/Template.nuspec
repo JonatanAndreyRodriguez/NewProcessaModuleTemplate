@@ -7,6 +7,7 @@
 		<owners><%=$PLASTER_PARAM_ModuleAuthor%></owners>
 		<licenseUrl>http://processa.com</licenseUrl>
 		<projectUrl>http://processa.com</projectUrl>
+		<iconUrl>https://avatars3.githubusercontent.com/u/5296012?s=64</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description><%=$PLASTER_PARAM_ModuleDesc%></description>
 		 <releaseNotes>Ejecute: Notepad.exe (Join-Path -Path (Split-Path -Path (Get-Module <%=$PLASTER_PARAM_ModuleName%>).Path) -ChildPath 'ReleaseNotes.txt')</releaseNotes>
@@ -19,9 +20,9 @@
 		<file src="Release\Functions\*.*" target="Functions"/>
 		<file src="Release\Resources\*.*" target="Resources"/>
 		<file src="Release\SQLScripts\*.*" target="SQLScripts"/>
-		<file src="Release\<%=$PLASTER_PARAM_ModuleName%>.config"/>		
 		<file src="Release\<%=$PLASTER_PARAM_ModuleName%>.psd1"/>
 		<file src="Release\<%=$PLASTER_PARAM_ModuleName%>.psm1"/>
+		<file src="Release\<%=$PLASTER_PARAM_ModuleName%>-Format.ps1xml"/>
 		<file src="Release\ReleaseNotes.txt"/>
 		<file src="Release\Startup.ps1"/>
 		<file src="Release\Config.psd1"/>

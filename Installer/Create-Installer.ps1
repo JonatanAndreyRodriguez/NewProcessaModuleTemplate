@@ -1,15 +1,15 @@
 <#===================================================================
-1. Ejecute este script desde una lÃ­nea de comandos de PowerShell estando ubicado en la carpeta contenedora del propio script (Installer).
-1.1 En la carpeta Installer\Release se copiaran los archivos que componen el mÃ³dulo de PowerShell (binarios y de texto).
-1.2 Si necesita "emular" el estado final del mÃ³dulo cÃ¡rguelo desde esta carpeta. Estos son los archivos que se van a incluir en los instaladores.
+1. Ejecute este script desde una línea de comandos de PowerShell estando ubicado en la carpeta contenedora del propio script (Installer).
+1.1 En la carpeta Installer\Release se copiaran los archivos que componen el módulo de PowerShell (binarios y de texto).
+1.2 Si necesita "emular" el estado final del módulo cárguelo desde esta carpeta. Estos son los archivos que se van a incluir en los instaladores.
 
 # Archivos resultantes:
-En la carpeta Installer se crearÃ¡ el archivo nuget que permite publicar el mÃ³dulo en ProGet.
+En la carpeta Installer se creará el archivo nuget que permite publicar el módulo en ProGet.
 
 2 Publique el archivo nupkg resultante en el Feed de PowerShell del servidor ProGet interno en http://10.100.102.22:8020
-2.1 TambiÃ©n puede utilizar el parÃ¡metro $Publish del script para publicar en ProGet de forma automÃ¡tica.
+2.1 También puede utilizar el parámetro $Publish del script para publicar en ProGet de forma automática.
 
-NOTA: Omita los mensajes de advertencia que se generan cuando se crea el archivo nupkg (Paso 9).
+NOTA: Omita los mensajes de advertencia que se generan cuando se crea el archivo nupkg (Paso 6).
 ===================================================================#>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingInvokeExpression", "")]
 param
@@ -26,20 +26,13 @@ function Write-Info {
         [Parameter(Mandatory, ValueFromPipeline)]
         [string] $Message
     )
-	
-    '[INFO] ' | Out-Default
-    $Message | Out-Default
+
+	"[INFO] > $Message" | Out-Default	
 }
 
-Import-Module PSProcessa -Force
-Import-Module ..\<%=$PLASTER_PARAM_ModuleName%> -Force
+Add-Type -AssemblyName 'System.Xml.Linq'
 
 try {
-
-    $ModuleVersion = (Get-Module -Name <%=$PLASTER_PARAM_ModuleName%>).Version.ToString().Substring(0,4)
-    $VersionFormat =  $ModuleVersion  + '{0}.{1}'
-
-
     $NugetPath = $env:NUGET_PATH
     if (-not $NugetPath) {
         throw 'Set the NUGET_PATH environment variable before continue.'
@@ -47,7 +40,7 @@ try {
     }
 
     ###############################################
-    #Paso 1: Crear la carpeta Release (allÃ­ se dejaran todos los archivos que componen el m??o).
+    #Paso 1: Crear la carpeta Release (allí se dejaran todos los archivos que componen el m??o).
     ###############################################
     $DestinationPath = Join-Path -Path "$PSScriptRoot" -ChildPath 'Release'
     "Remove directory $DestinationPath" | Write-Info
@@ -57,14 +50,14 @@ try {
 
 
     ###############################################
-    #Paso 2: Copiar todos los archivos binarios que componen el mÃ³dulo (Post-Build del proyecto con la dll los deja en esta carpeta).
+    #Paso 2: Copiar todos los archivos binarios que componen el módulo (Post-Build del proyecto con la dll los deja en esta carpeta).
     ###############################################
     $BinSource = Resolve-Path -Path (Join-Path -Path "$PSScriptRoot" -ChildPath '..\bin\')
     'Copy bin folder' | Write-Info
     Copy-Item -Path $BinSource.Path -Destination $DestinationPath -Recurse -Force
 
     ###############################################
-    #Paso 3: Copiar todos los archivos de PowerShell que componen el mÃ³dulo (diferentes a binarios). La raÃ­z del mÃ³dulo.
+    #Paso 3: Copiar todos los archivos de PowerShell que componen el módulo (diferentes a binarios). La raíz del módulo.
     ###############################################
     'Copy PowerShell files' | Write-Info
     $RootModulePath = Resolve-Path -Path (Join-Path -Path "$PSScriptRoot" -ChildPath '..')
@@ -94,29 +87,35 @@ try {
     }
 	
     ###############################################
-    #Paso 4: Determinar la versiÃ³n del mÃ³dulo.
+    #Paso 4: Determinar la versión del módulo.
     ###############################################
     $EpochDate = Get-Date -Year 2000 -Month 1 -Day 1 -Hour 0 -Minute 0 -Second 0
     $Build = ((Get-Date) - $EpochDate).TotalDays.ToString('F0')
     $Revision = ((Get-Date) - (Get-Date).Date).TotalSeconds.ToString('F0')
-    $Version = $VersionFormat -f $Build, $Revision
-    "Version: $Version" | Write-Info
+
+    $ReleaseManifestFile = (Resolve-Path -Path ('$PSScriptRoot\..\Release\<%=$PLASTER_PARAM_ModuleName%>.psd1')).Path
+    $ReleaseManifestData = Import-PowerShellDataFile -Path $ReleaseManifestFile
+    $CurrentVersion =  [Version]$ReleaseManifestData.ModuleVersion
+    $ReleaseVersion = (New-Object -TypeName 'Version' -ArgumentList $CurrentVersion.Major, $CurrentVersion.Minor, $Build, $Revision).ToString()
+    "Module Version: $ReleaseVersion" | Write-Info
 
     ###############################################
-    #Paso 5: Reemplazar el nÃºmero de versiÃ³n en el archivo de instalaciÃ³n de Nuget.
-    #Paso 5.1: Reemplazar el nÃºmero de versiÃ³n en el archivo psd1
+    #Paso 5: Reemplazar el número de versión en el archivo de instalación de Nuget.
+    #Paso 5.1: Reemplazar el número de versión en el archivo psd1
     ###############################################
-    $NugetFilePath = Resolve-Path -Path (Join-Path -Path $PSScriptRoot -ChildPath '<%=$PLASTER_PARAM_ModuleName%>.nuspec') 
-    $NewVersion = "<version>$Version</version>"
-    $Pattern = '<version>\d{1,}\.\d{1,}\.\d{1,}[.0-9]{0,}</version>'
-    (Get-Content -Path $NugetFilePath -Raw) -replace $Pattern, $NewVersion | Out-File -FilePath $NugetFilePath -Encoding UTF8
+    $NugetFilePath = Resolve-Path -Path "$PSScriptRoot\<%=$PLASTER_PARAM_ModuleName%>.nuspec"
+    $NugetContent = [System.Xml.Linq.XElement]::Load($NugetFilePath)
+    $NugetContent.Element("metadata").Element("version").Value = $ReleaseVersion
+    $NugetContent.Save($NugetFilePath)
 
-    $PSManifestFile = Resolve-Path -Path (Join-Path -Path $PSScriptRoot -ChildPath 'Release\<%=$PLASTER_PARAM_ModuleName%>.psd1') 
-    $ManifestContent = Get-Content -Raw -Path $PSManifestFile
-    $RegexOptions = [System.Text.RegularExpressions.RegexOptions]::Multiline -bor [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
-	$ModuleVersionRegex = [Regex]::new("^(\t+|\s+)ModuleVersion.*={1}.*[0-9]+.*$", $RegexOptions)
-    $ReplaceText = "ModuleVersion = '{0}'" -f $Version
-    $ModuleVersionRegex.Replace($ManifestContent, $ReplaceText).Trim() | Out-File -FilePath $PSManifestFile -Encoding Default
+    $PSData = @{
+        LicenseUri   = $NugetContent.Element("metadata").Element("licenseUrl").Value
+        ProjectUri   = $NugetContent.Element("metadata").Element("projectUrl").Value
+        IconUri      = $NugetContent.Element("metadata").Element("iconUrl").Value
+        ReleaseNotes = $NugetContent.Element("metadata").Element("releaseNotes").Value
+        Tags         = $NugetContent.Element("metadata").Element("tags").Value -split ' '
+    }
+    Update-ModuleManifest -Path $ReleaseManifestFile -ModuleVersion ([Version]$ReleaseVersion) -PrivateData $PSData
 
     ###############################################
     #Paso 6: Crear/Compilar el instalador de Nuget.
@@ -126,30 +125,23 @@ try {
     $CompileNugetCommand = '& "{0}" pack "{1}" -OutputDirectory "{2}"' -f $NugetCompiler, $NugetFilePath, $OutputDirectory
     Invoke-Expression -Command $CompileNugetCommand
 
-    ###############################################
-    #Paso 7: Eliminar el indicador de configuraciÃ³n establecida y escribir los valores predeterminados de configuraciÃ³n.
-    ###############################################
-    $AppConfigFile = Resolve-Path -Path (Join-Path -Path $PSScriptRoot -ChildPath 'Release\<%=$PLASTER_PARAM_ModuleName%>.config') 
-    Remove-AppSetting -p $AppConfigFile -Key 'configured'
-    Set-AppSetting -Path $AppConfigFile -Key 'MyKey' -Value 'MyValue'
-    Set-ConnectionString -Path $AppConfigFile -Name 'Sql:Local' -ConnectionString 'Data Source=(local);Initial Catalog=master;Integrated Security=True' -Force
 
     ###############################################
-    #Paso 8: Publicar en ProGet.
+    #Paso 7: Publicar en ProGet.
     ###############################################
 	
-	# Â¿De donde viene este valor? 
+	# ¿De donde viene este valor? 
 	# http://proget/administration/feeds/manage-feed?feedId=5
 	$ProGetApiKey = 'bc3401ac-c269-4b77-8b12-f88398600043'
 
 
-	# Â¿De donde viene este valor? 
-	# LÃ­nea de comandos: nuget source list
-	# Â¿CÃ³mo se configura este valor? 
-	# LÃ­nea de comandos: nuget source add -Name "Processa GT" -Source "http://proget/nuget/PowerShell"
+	# ¿De donde viene este valor? 
+	# Línea de comandos: nuget source list
+	# ¿Cómo se configura este valor? 
+	# Línea de comandos: nuget source add -Name "Processa GT" -Source "http://proget/nuget/PowerShell"
 	$NugetSourceName = 'Processa GT'
 
-	$PackageFilePath = Join-Path -Path $PSScriptRoot -ChildPath ('<%=$PLASTER_PARAM_ModuleName%>.{0}.nupkg' -f $Version)	
+	$PackageFilePath = Join-Path -Path $PSScriptRoot -ChildPath ('<%=$PLASTER_PARAM_ModuleName%>.{0}.nupkg' -f $ReleaseVersion)	
 	$PushPackageCommand = '& "{0}" push "{1}" "{2}" -Source "{3}"' -f $NugetCompiler, $PackageFilePath, $ProGetApiKey, $NugetSourceName
 	$PushPackageCommand  | Write-Info
 	

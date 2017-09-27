@@ -14,5 +14,5 @@
         'Get-Configuration',
         'Set-Configuration',
         'Test-Configuration')
-    #FormatsToProcess   = @('<%=$PLASTER_PARAM_ModuleName%>-Format.ps1xml')
+    FormatsToProcess   = @('<%=$PLASTER_PARAM_ModuleName%>-Format.ps1xml')
 }

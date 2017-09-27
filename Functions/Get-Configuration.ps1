@@ -46,10 +46,11 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
         # Agregue a continuación los valores de configuración del módulo.
         # Los valores que se muestran a continuación son de carácter demostrativo. Quítelos al finalizar
         $Script:ConfigurationCache = [PSCustomObject] @{
+			PSTypeName                 = 'Processa.Management.Automation.<%=$PLASTER_PARAM_ModuleName%>.ConfigInfo'
             MySqlDummyConnectionString = $ConnectionStrings['Sql:Local']
-            MyDummyKey                 = $AppSettings['MyKey']
-			Configured                 = $AppSettings['configured']
+			Configured                 = [bool]$AppSettings['configured'] -match 'true|t|1|yes'
             SqlDummyStatement          = Get-Content -Path (Join-Path -Path $SqlScriptPath -ChildPath 'Get-Dummy.sql') -Raw
+			AppConfig                  = $Script:AppConfig
         }
 
         $Script:ConfigurationCache | Write-Output

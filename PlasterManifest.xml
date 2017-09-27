@@ -4,7 +4,7 @@
   <metadata>
     <name>ProcessaTemplate</name>
     <id>ceae0f9b-7c7b-403f-a99c-f9f859e236c7</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <title>Processa PowerShell Template</title>
     <description>Creates files for a PowerShell module</description>
     <author>Atorrest</author>
@@ -41,14 +41,15 @@
 	<file source='Installer\Get-FunctionsToExport.ps1' destination='Installer\Get-FunctionsToExport.ps1'/>
 	<file source='.vscode\tasks.json' destination='.vscode\tasks.json'/>
 	
-	<templateFile source='Template.config' destination='${PLASTER_PARAM_ModuleName}.config'/>
 	<templateFile source='Template.psm1' destination='${PLASTER_PARAM_ModuleName}.psm1'/>	
+	<templateFile source='Template-Format.ps1xml' destination='${PLASTER_PARAM_ModuleName}-Format.ps1xml'/>	
 	<templateFile source='Template.psd1' destination='${PLASTER_PARAM_ModuleName}.psd1'/>	
 	
 	<templateFile source='ReleaseNotes.txt' destination='ReleaseNotes.txt'/>
 	<templateFile source='Startup.ps1' destination='Startup.ps1'/>	
 	
 	<templateFile source='Functions\Get-ConfigFile.ps1' destination='Functions\Get-ConfigFile.ps1'/>
+	<templateFile source='Functions\Get-ConfigPath.ps1' destination='Functions\Get-ConfigPath.ps1'/>
 	<templateFile source='Functions\Get-Configuration.ps1' destination='Functions\Get-Configuration.ps1'/>
 	<templateFile source='Functions\Set-Configuration.ps1' destination='Functions\Set-Configuration.ps1'/>
 	<templateFile source='Functions\Test-Configuration.ps1' destination='Functions\Test-Configuration.ps1'/>
