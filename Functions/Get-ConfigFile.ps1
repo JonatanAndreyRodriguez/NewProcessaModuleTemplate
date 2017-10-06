@@ -16,7 +16,7 @@ Ruta de acceso predeterminada del archivo.
 Ruta de acceso del archivo de confoguración.
 
 .NOTES
-Autor: Atorrest
+Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
 #>
     [CmdletBinding()]
     [OutputType([string])]

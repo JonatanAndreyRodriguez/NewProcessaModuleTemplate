@@ -10,7 +10,7 @@ Se hace de esta forma para que la información contenida en el archivo no se pier
 Ruta de acceso de la raiz del módulo.
 
 .NOTES
-Author: Atorres
+Author: <%=$PLASTER_PARAM_ModuleAuthor%>
 #>
 
     [CmdletBinding()]
