@@ -10,7 +10,7 @@
 		<iconUrl>https://avatars3.githubusercontent.com/u/5296012?s=64</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description><%=$PLASTER_PARAM_ModuleDesc%></description>
-		 <releaseNotes>Ejecute: Notepad.exe (Join-Path -Path (Split-Path -Path (Get-Module <%=$PLASTER_PARAM_ModuleName%>).Path) -ChildPath 'ReleaseNotes.txt')</releaseNotes>
+		 <releaseNotes>Ejecute: Notepad.exe (Join-Path -Path (Split-Path -Path (Get-Module <%=$PLASTER_PARAM_ModuleName%> -ListAvailable).Path) -ChildPath 'ReleaseNotes.txt')</releaseNotes>
 		<copyright>Processa <%=$(Get-Date).Year%></copyright>
 		<tags>PowerShell Processa</tags>
 	</metadata>

@@ -104,9 +104,12 @@ try {
     #Paso 5.1: Reemplazar el número de versión en el archivo psd1
     ###############################################
     $NugetFilePath = Resolve-Path -Path "$PSScriptRoot\<%=$PLASTER_PARAM_ModuleName%>.nuspec"
-    $NugetContent = [System.Xml.Linq.XElement]::Load($NugetFilePath)
+    $UTF8 = [System.Text.Encoding]::UTF8
+	$StreamReader = [System.IO.StreamReader]::New($NugetFilePath,$UTF8)
+	$NugetContent = [System.Xml.Linq.XElement]::Load($StreamReader)
     $NugetContent.Element("metadata").Element("version").Value = $ReleaseVersion
-    $NugetContent.Save($NugetFilePath)
+    $StreamReader.Dispose()
+	$NugetContent.Save($NugetFilePath)
 
     $PSData = @{
         LicenseUri   = $NugetContent.Element("metadata").Element("licenseUrl").Value

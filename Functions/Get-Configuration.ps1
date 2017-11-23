@@ -48,7 +48,7 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
         $Script:ConfigurationCache = [PSCustomObject] @{
 			PSTypeName                 = 'Processa.Management.Automation.<%=$PLASTER_PARAM_ModuleName%>.ConfigInfo'
             MySqlDummyConnectionString = $ConnectionStrings['Sql:Local']
-			Configured                 = [bool]$AppSettings['configured'] -match 'true|t|1|yes'
+			Configured                 = [bool]($AppSettings['configured'] -match 'true|t|1|yes')
             SqlDummyStatement          = Get-Content -Path (Join-Path -Path $SqlScriptPath -ChildPath 'Get-Dummy.sql') -Raw
 			AppConfig                  = $Script:AppConfig
         }

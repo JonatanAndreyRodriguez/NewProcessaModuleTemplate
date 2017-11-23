@@ -35,7 +35,7 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
         )
     
         if (Set-ConfigurationFile -Path $Script:AppConfig -ConfigurationInfo $ConfigInfo) {
-            'Configuration saved' | Write-Verbose
+			Write-Information -MessageData 'Configuration saved' -InformationAction 'Continue'
             $Script:ConfigurationCache = $null
             Test-Configuration -SaveFlag
         }

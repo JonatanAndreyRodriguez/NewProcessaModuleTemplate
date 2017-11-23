@@ -10,7 +10,7 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
 [CmdletBinding()]
 Param()
 
-if ((Get-Configuration).Configured -eq '1') {
+if ((Get-Configuration).Configured) {
     Test-Configuration
     return
 }
