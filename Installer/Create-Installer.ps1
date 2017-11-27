@@ -93,7 +93,7 @@ try {
     $Build = ((Get-Date) - $EpochDate).TotalDays.ToString('F0')
     $Revision = ((Get-Date) - (Get-Date).Date).TotalSeconds.ToString('F0')
 
-    $ReleaseManifestFile = (Resolve-Path -Path ('$PSScriptRoot\..\Release\<%=$PLASTER_PARAM_ModuleName%>.psd1')).Path
+    $ReleaseManifestFile = (Resolve-Path -Path ("$PSScriptRoot\..\Release\<%=$PLASTER_PARAM_ModuleName%>.psd1")).Path
     $ReleaseManifestData = Import-PowerShellDataFile -Path $ReleaseManifestFile
     $CurrentVersion =  [Version]$ReleaseManifestData.ModuleVersion
     $ReleaseVersion = (New-Object -TypeName 'Version' -ArgumentList $CurrentVersion.Major, $CurrentVersion.Minor, $Build, $Revision).ToString()

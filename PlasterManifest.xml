@@ -4,7 +4,7 @@
   <metadata>
     <name>ProcessaTemplate</name>
     <id>ceae0f9b-7c7b-403f-a99c-f9f859e236c7</id>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <title>Processa PowerShell Template</title>
     <description>Creates files for a PowerShell module</description>
     <author>Atorrest</author>
@@ -31,7 +31,6 @@
 	<file source='' destination='Resources\'/>
 	<file source='' destination='SQLScripts\'/>
 	<file source='' destination='.vscode\'/>
-	<file source='' destination='Logs\'/>
 
 	<file source='Resources\Resources.psd1' destination='Resources\Resources.psd1'/>
 	<file source='SQLScripts\Get-Dummy.sql' destination='SQLScripts\Get-Dummy.sql'/>
