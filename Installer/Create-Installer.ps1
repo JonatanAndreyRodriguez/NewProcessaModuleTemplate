@@ -118,7 +118,7 @@ try {
         ReleaseNotes = $NugetContent.Element("metadata").Element("releaseNotes").Value
         Tags         = $NugetContent.Element("metadata").Element("tags").Value -split ' '
     }
-    Update-ModuleManifest -Path $ReleaseManifestFile -ModuleVersion ([Version]$ReleaseVersion) -PrivateData $PSData
+    Update-ModuleManifest -Path $ReleaseManifestFile -ModuleVersion ([Version]$ReleaseVersion) -PrivateData $PSData -AliasesToExport '*'
 
     ###############################################
     #Paso 6: Crear/Compilar el instalador de Nuget.
