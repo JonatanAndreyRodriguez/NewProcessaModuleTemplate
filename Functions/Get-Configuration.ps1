@@ -41,15 +41,13 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
         $ConnectionStrings = Get-ConnectionStringSection -Path $Script:AppConfig
         $AppSettings = Get-AppSettingSection -Path $Script:AppConfig
 
-        $SqlScriptPath = Join-Path -Path (Get-ScriptDirectory -Parent) -ChildPath 'SQLScripts'
-
         # Agregue a continuación los valores de configuración del módulo.
         # Los valores que se muestran a continuación son de carácter demostrativo. Quítelos al finalizar
         $Script:ConfigurationCache = [PSCustomObject] @{
-			PSTypeName                 = 'Processa.Management.Automation.<%=$PLASTER_PARAM_ModuleName%>.ConfigInfo'
+			PSTypeName                 = 'Processa.Management.Automation.<%=$PLASTER_PARAM_ModuleName%>.Configuration'
             MySqlDummyConnectionString = $ConnectionStrings['Sql:Local']
 			Configured                 = [bool]($AppSettings['configured'] -match 'true|t|1|yes')
-            SqlDummyStatement          = Get-Content -Path (Join-Path -Path $SqlScriptPath -ChildPath 'Get-Dummy.sql') -Raw
+            SqlDummyStatement          = Get-Content -Path "$Script:SQLScriptPath\Get-Dummy.sql" -Raw
 			AppConfig                  = $Script:AppConfig
         }
 
