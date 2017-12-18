@@ -4,7 +4,7 @@
   <metadata>
     <name>ProcessaTemplate</name>
     <id>ceae0f9b-7c7b-403f-a99c-f9f859e236c7</id>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <title>Processa PowerShell Template</title>
     <description>Creates files for a PowerShell module</description>
     <author>Atorrest</author>
@@ -21,12 +21,15 @@
 	<requireModule name="PSProcessa" minimumVersion="1.5.0" message="You need to install PSProcessa module before continue."/>
 	<requireModule name="PlatyPS" minimumVersion="0.8.0" message="You need to install PlatyPS module before continue."/>
 	<requireModule name="PSScriptAnalyzer" minimumVersion="1.5.0" message="You need to install PSScriptAnalyzer module before continue."/>
+	<requireModule name="PSCodeHealth" minimumVersion="0.2.9" message="You need to install PSCodeHealth module before continue."/>
+	<requireModule name="NLog" minimumVersion="1.2.0" message="You need to install NLog module before continue."/>
 
     <file source='' destination='bin\'/>
 	<file source='' destination='Docs\'/>
 	<file source='' destination='Installer\'/>
 	<file source='' destination='Functions\'/>
 	<file source='' destination='Classes\'/>
+	<file source='' destination='PSCodeHealth\'/>
 	<file source='' destination='Pester\'/>
 	<file source='' destination='Resources\'/>
 	<file source='' destination='SQLScripts\'/>
@@ -52,7 +55,6 @@
 	<templateFile source='Functions\Get-Configuration.ps1' destination='Functions\Get-Configuration.ps1'/>
 	<templateFile source='Functions\Set-Configuration.ps1' destination='Functions\Set-Configuration.ps1'/>
 	<templateFile source='Functions\Test-Configuration.ps1' destination='Functions\Test-Configuration.ps1'/>
-	<templateFile source='Functions\Get-ScriptDirectory.ps1' destination='Functions\Get-ScriptDirectory.ps1'/>
 	<templateFile source='Docs\Invoke-Build.ps1' destination='Docs\Invoke-Build.ps1'/>
 	<templateFile source='Installer\Template.nuspec' destination='Installer\${PLASTER_PARAM_ModuleName}.nuspec'/>
 	<templateFile source='Installer\Create-Installer.ps1' destination='Installer\Create-Installer.ps1'/>

@@ -7,7 +7,7 @@
     Copyright          = '(c) <%=$PLASTER_Year%> Processa SAS. All rights reserved.'
     PowerShellVersion  = '5.0'
     CLRVersion         = '4.0'
-    RequiredModules    = @('Pscx', @{ModuleName = 'PSProcessa'; ModuleVersion = '1.5'})
+    RequiredModules    = @('Pscx', 'PSProcessa', 'NLog')
     Description        = '<%=$PLASTER_PARAM_ModuleDesc%>'
     #RequiredAssemblies = @('.\bin\My.dll')
     FunctionsToExport  = @(

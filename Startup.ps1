@@ -10,6 +10,9 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
 [CmdletBinding()]
 Param()
 
+Start-Log -Source ($Script:ModuleName)
+Set-Variable -Name 'PSProcessa-CurrentModule' -Option 'AllScope' -Value ($Script:ModuleName) -Scope 'Global'
+
 if ((Get-Configuration).Configured) {
     Test-Configuration
     return

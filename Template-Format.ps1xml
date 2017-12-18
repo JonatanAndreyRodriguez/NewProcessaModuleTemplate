@@ -4,7 +4,7 @@
         <View>
             <Name>ConfigInfo</Name>
             <ViewSelectedBy>
-                <TypeName>Processa.Management.Automation.<%=$PLASTER_PARAM_ModuleName%>.ConfigInfo</TypeName>
+                <TypeName>Processa.Management.Automation.<%=$PLASTER_PARAM_ModuleName%>.Configuration</TypeName>
             </ViewSelectedBy>
             <ListControl>
                 <ListEntries>
