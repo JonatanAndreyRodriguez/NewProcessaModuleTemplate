@@ -8,7 +8,7 @@ Establece la información de los datos de configuración del módulo en el archivo 
 
 .EXAMPLE
 Set-Configuration
-Muestra una ventana que permite al administrador establecer los valores de configuración. 
+Muestra una ventana que permite al administrador establecer los valores de configuración.
 
 .INPUTS
 None
@@ -20,20 +20,20 @@ None
 [Get-Configuration](Get-Configuration.md)
 
 .NOTES
-Autor: <%=$PLASTER_PARAM_ModuleAuthor%>  
-#>    
+Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
+#>
     [CmdletBinding()]
     [OutputType([System.Void])]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     Param()
-    
-    try {    
+
+    try {
 		# Agregue sus valores de configuración y quite los "dummy"
         $ConfigInfo = @(
             New-ConfigurationItem -Type 'ConnectionString' -ConfigKey 'Sql:Local' -FriendlyName 'SqlLocal' -DataType 'String' -Description 'Mi servidor de Sql Server' -Category 'Cadenas de conexión'
             New-ConfigurationItem -Type 'AppSetting' -ConfigKey 'MyKey' -FriendlyName 'UnValor' -DataType 'String' -Description 'Ingrese un valor cualquiera' -Category 'Configuraciones generales'
         )
-    
+
         if (Set-ConfigurationFile -Path $Script:AppConfig -ConfigurationInfo $ConfigInfo) {
 			Write-Information -MessageData 'Configuration saved' -InformationAction 'Continue'
             $Script:ConfigurationCache = $null
@@ -41,6 +41,7 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
         }
     }
     catch {
+        Write-Log -ErrorRecord $PSItem
         throw
     }
 }

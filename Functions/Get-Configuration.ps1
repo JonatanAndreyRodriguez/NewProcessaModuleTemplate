@@ -24,12 +24,12 @@ Obtiene los nombres de las propiedades incluidas en el objeto de retorno.
 [Test-Configuration](Test-Configuration.md)
 
 .NOTES
-Autor: <%=$PLASTER_PARAM_ModuleAuthor%> 
-#>    
+Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
+#>
     [CmdletBinding()]
     [OutputType([PSCustomObject])]
     Param()
-    
+
     try {
 
         if ($Script:ConfigurationCache) {
@@ -37,7 +37,7 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
             $Script:ConfigurationCache | Write-Output
             return
         }
-    
+
         $ConnectionStrings = Get-ConnectionStringSection -Path $Script:AppConfig
         $AppSettings = Get-AppSettingSection -Path $Script:AppConfig
 
@@ -54,6 +54,7 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
         $Script:ConfigurationCache | Write-Output
     }
     catch {
+        Write-Log -ErrorRecord $PSItem
         throw
     }
 }

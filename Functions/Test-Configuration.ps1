@@ -27,29 +27,30 @@ None
 [Get-Configuration](Get-Configuration.md)
 
 .NOTES
-Autor: <%=$PLASTER_PARAM_ModuleAuthor%>  
-#>    
+Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
+#>
     [CmdletBinding()]
     [OutputType([System.Void])]
     Param(
         [switch]
         $SaveFlag
     )
-    
-    try {    
+
+    try {
 
         $Configuration = Get-Configuration
         $MessageFormat = "[INFO] => {0}"
 
 		# Agregue sus valiadaciones y quite las "dummy"
-        $MessageFormat -f 'Connect-SqlLocal' | Write-Verbose       
-        Test-SqlConnection -ConnectionString $Configuration.MySqlDummyConnectionString | Out-Null 
+        $MessageFormat -f 'Connect-SqlLocal' | Write-Verbose
+        Test-SqlConnection -ConnectionString $Configuration.MySqlDummyConnectionString | Out-Null
 
         if ($SaveFlag.IsPresent) {
             Set-AppSetting -Path $Script:AppConfig -Key 'configured' -Value '1'
         }
     }
     catch {
+        Write-Log -ErrorRecord $PSItem
         Remove-AppSetting -Path $Script:AppConfig -Key 'configured'
         throw
     }
