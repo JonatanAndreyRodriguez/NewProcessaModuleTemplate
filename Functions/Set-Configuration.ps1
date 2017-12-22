@@ -11,7 +11,8 @@ Set-Configuration
 Muestra una ventana que permite al administrador establecer los valores de configuración.
 
 .INPUTS
-None
+Ninguno
+Esta función no acepta parámetros a través de la canalización,
 
 .LINK
 [Test-Configuration](Test-Configuration.md)
@@ -28,14 +29,17 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
     Param()
 
     try {
+        $InformationAction = $PSBoundParameters | Get-DictionaryKey -Key 'InformationAction' -DefaultValue 'Continue'
+
 		# Agregue sus valores de configuración y quite los "dummy"
         $ConfigInfo = @(
-            New-ConfigurationItem -Type 'ConnectionString' -ConfigKey 'Sql:Local' -FriendlyName 'SqlLocal' -DataType 'String' -Description 'Mi servidor de Sql Server' -Category 'Cadenas de conexión'
-            New-ConfigurationItem -Type 'AppSetting' -ConfigKey 'MyKey' -FriendlyName 'UnValor' -DataType 'String' -Description 'Ingrese un valor cualquiera' -Category 'Configuraciones generales'
+            New-ConfigurationItem -Type 'ConnectionString' -ConfigKey 'Sql:Local' -FriendlyName 'SqlLocal' -DataType 'String' -Description 'Mi servidor de Sql Server' -Category 'Cadenas de conexión' -DefaultIfNullOrEmpty 'Server=(local);Database=master;Trusted_Connection=True;'
+            New-ConfigurationItem -Type 'AppSetting' -ConfigKey 'MyKey' -FriendlyName 'UnValor' -DataType 'String' -Description 'Ingrese un valor cualquiera' -Category 'Configuraciones generales' -DefaultIfNullOrEmpty '123'
         )
 
         if (Set-ConfigurationFile -Path $Script:AppConfig -ConfigurationInfo $ConfigInfo) {
-			Write-Information -MessageData 'Configuration saved' -InformationAction 'Continue'
+            $ConfigInfo | Out-String | Write-Verbose
+			Write-Information -MessageData 'Starting testing phase...' -InformationAction $InformationAction
             $Script:ConfigurationCache = $null
             Test-Configuration -SaveFlag
         }
@@ -43,5 +47,8 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
     catch {
         Write-Log -ErrorRecord $PSItem
         throw
+    }
+    finally{
+        $Script:ConfigurationCache = $null
     }
 }

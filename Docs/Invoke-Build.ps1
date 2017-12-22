@@ -7,15 +7,15 @@ Genera los archivos Markdown de documentación del módulo.
 Invoke-Build
 
 .NOTES
-Autor: <%=$PLASTER_PARAM_ModuleAuthor%>  
-#>    
+Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
+#>
     [CmdletBinding()]
     [OutputType([PSCustomObject])]
     Param()
-    
+
 	Import-Module -Name 'PlatyPS'
 	Import-Module -Name '..\<%=$PLASTER_PARAM_ModuleName%>' -Force
-	$OutputFolder = Resolve-Path $PSScriptRoot
+	$OutputFolder = Resolve-Path -Path $PSScriptRoot
 	New-MarkdownHelp -Module '<%=$PLASTER_PARAM_ModuleName%>' -OutputFolder $OutputFolder -Force
 }
 

@@ -17,7 +17,7 @@ Author: <%=$PLASTER_PARAM_ModuleAuthor%>
     [OutputType([string])]
     Param
     (
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory,ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [string]
         $Path

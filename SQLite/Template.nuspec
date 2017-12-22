@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+	<metadata>
+		<id><%=$PLASTER_PARAM_ModuleName%></id>
+		<version>1.0.0.0</version>
+		<authors><%=$PLASTER_PARAM_ModuleAuthor%></authors>
+		<owners><%=$PLASTER_PARAM_OrganizationOwner%></owners>
+		<licenseUrl><%=$PLASTER_PARAM_OrganizationWebsite%></licenseUrl>
+		<projectUrl><%=$PLASTER_PARAM_OrganizationWebsite%></projectUrl>
+		<iconUrl><%=$PLASTER_PARAM_OrganizationAvatar%></iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description><%=$PLASTER_PARAM_ModuleDesc%></description>
+		 <releaseNotes>Ejecute: Notepad.exe (Join-Path -Path (Split-Path -Path (Get-Module <%=$PLASTER_PARAM_ModuleName%> -ListAvailable).Path) -ChildPath 'ReleaseNotes.txt')</releaseNotes>
+		<copyright><%=$PLASTER_PARAM_ModuleOrganization%> <%=$(Get-Date).Year%></copyright>
+		<tags>PowerShell <%=$PLASTER_PARAM_ModuleOrganization%></tags>
+	</metadata>
+	<files>
+		<file src="Release\bin\*.*" target="bin"/>
+		<file src="Release\Classes\*.*" target="Classes"/>
+		<file src="Release\Functions\*.*" target="Functions"/>
+		<file src="Release\Resources\*.*" target="Resources"/>
+		<file src="Release\SQLScripts\*.sql" target="SQLScripts"/>
+		<file src="Release\SQLScripts\Schema\*.sql" target="SQLScripts"/>
+		<file src="Release\<%=$PLASTER_PARAM_ModuleName%>.psd1"/>
+		<file src="Release\<%=$PLASTER_PARAM_ModuleName%>.psm1"/>
+		<file src="Release\<%=$PLASTER_PARAM_ModuleName%>-Format.ps1xml"/>
+		<file src="Release\ReleaseNotes.txt"/>
+		<file src="Release\Startup.ps1"/>
+		<file src="Release\Config.psd1"/>
+	</files>
+</package>

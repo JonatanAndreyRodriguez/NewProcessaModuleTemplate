@@ -7,7 +7,8 @@ Obtiene la información de los datos de configuración del módulo.
 Obtiene la información de los datos de configuración del módulo a partir de los datos en el archivo <%=$PLASTER_PARAM_ModuleName%>.config
 
 .INPUTS
-None
+Ninguno
+Esta función no acepta parámetros a través de la canalización,
 
 .EXAMPLE
 Get-Configuration
@@ -47,7 +48,7 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
 			PSTypeName                 = 'Processa.Management.Automation.<%=$PLASTER_PARAM_ModuleName%>.Configuration'
             MySqlDummyConnectionString = $ConnectionStrings['Sql:Local']
 			Configured                 = [bool]($AppSettings['configured'] -match 'true|t|1|yes')
-            SqlDummyStatement          = Get-Content -Path "$Script:SQLScriptPath\Get-Dummy.sql" -Raw
+            SqlDummyStatement          = 'Get-Dummy.sql' | Get-SqlScriptContent
 			AppConfig                  = $Script:AppConfig
         }
 

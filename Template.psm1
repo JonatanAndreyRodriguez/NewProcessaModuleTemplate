@@ -2,11 +2,11 @@
 
 <#
 .SYNOPSIS
-Carga de forma dinámica los archivos ps1 pertenecientes al módulo. 
+Carga de forma dinámica los archivos ps1 pertenecientes al módulo.
 La instrucción try/catch evita que el módulo se cargue si se presentará algún error al procesar los archivos ps1
 
 .NOTES
-Autor: <%=$PLASTER_PARAM_ModuleAuthor%>  
+Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
 #>
 
 try {
@@ -16,30 +16,29 @@ try {
             "Importing files from $FullPath " | Write-Verbose
             $Filter = $PSItem + '\*.ps1'
 
-            Get-ChildItem -LiteralPath $PSScriptRoot -Filter $Filter -File | 
-                Select-Object -ExpandProperty FullName | 
-                ForEach-Object { 
+            Get-ChildItem -LiteralPath $PSScriptRoot -Filter $Filter -File |
+                Select-Object -ExpandProperty FullName |
+                ForEach-Object {
 					$PSItem | Write-Verbose
 					. $PSItem
 				}
-        }		
-    }	
+        }
+    }
 
     "Importing Resources from $PSScriptRoot\Resources" | Write-Verbose
 	$Script:Resx = Import-LocalizedData -BaseDirectory "$PSScriptRoot\Resources" -FileName 'Resources'
 	$Script:AppConfig = "$PSScriptRoot\<%=$PLASTER_PARAM_ModuleName%>.config" | Get-ConfigFile
-	$Script:ModuleRoot = Split-Path -Path $Script:AppConfig -Parent
-	$Script:ConfigPath = Split-Path -Path $Script:AppConfig -Parent
-	$Script:SQLScriptPath = Join-Path -Path $Script:ModuleRoot -ChildPath 'SQLScripts'
-	$Script:ModuleName = '<%=$PLASTER_PARAM_ModuleName%>'
+	$Script:ModuleRoot = "$PSScriptRoot"
+	$Script:SQLScriptPath = "$PSScriptRoot\SQLScripts"
+    $Script:ModuleName = '<%=$PLASTER_PARAM_ModuleName%>'
 
     # Procesar el archivo de inicialización (si existiera).
-    Get-ChildItem -LiteralPath $PSScriptRoot -Filter 'Startup.ps1' -File | 
-        Select-Object -ExpandProperty FullName | 
-        ForEach-Object { 
+    Get-ChildItem -LiteralPath $PSScriptRoot -Filter 'Startup.ps1' -File |
+        Select-Object -ExpandProperty FullName |
+        ForEach-Object {
 			$PSItem | Write-Verbose
-			. $PSItem 
-		} 
+			. $PSItem
+		}
 }
 catch {
     throw

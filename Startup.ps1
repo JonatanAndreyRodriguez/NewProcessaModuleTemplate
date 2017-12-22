@@ -3,7 +3,7 @@
 Este código se ejecuta tan pronto finaliza la carga del módulo.
 
 .NOTES
-Autor: <%=$PLASTER_PARAM_ModuleAuthor%>   
+Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
 #>
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
@@ -14,7 +14,7 @@ Start-Log -Source ($Script:ModuleName)
 Set-Variable -Name 'PSProcessa-CurrentModule' -Option 'AllScope' -Value ($Script:ModuleName) -Scope 'Global'
 
 if ((Get-Configuration).Configured) {
-    Test-Configuration
+    Test-Configuration -InformationAction 'SilentlyContinue'
     return
 }
 function private:Out-Help {
@@ -24,7 +24,7 @@ function private:Out-Help {
         [Parameter(Mandatory, ValueFromPipeline)]
         [string]
         $Text,
-        
+
         [Parameter()]
         [string]
         $Padding = ' '

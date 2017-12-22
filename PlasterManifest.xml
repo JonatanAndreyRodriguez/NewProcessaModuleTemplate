@@ -4,27 +4,37 @@
   <metadata>
     <name>ProcessaTemplate</name>
     <id>ceae0f9b-7c7b-403f-a99c-f9f859e236c7</id>
-    <version>1.0.10</version>
+    <version>2.0.0</version>
     <title>Processa PowerShell Template</title>
     <description>Creates files for a PowerShell module</description>
     <author>Atorrest</author>
     <tags>Module, ModuleManifest</tags>
   </metadata>
   <parameters>
-	<parameter name="ModuleName" type="text" prompt="Name of your module" default="cApp"/>
-	<parameter name="ModuleDesc" type="text" prompt="Brief description on this module" />
-	<parameter name="ModuleAuthor" type="user-fullname" prompt="Author"/>
+	<parameter name='ModuleName' type='text' prompt='Name of your module' default='cApp'/>
+	<parameter name='ModuleDesc' type='text' prompt='Brief description on this module' />
+	<parameter name='ModuleAuthor' type='user-fullname' prompt='Author'/>
+	<parameter name='SQLite' type='choice' prompt='Requires SQLite database?' default='0'>
+		<choice label='&amp;No' help='Exclude SQLite database functions' value='No' />
+		<choice label='&amp;Yes' help='Include SQLite database functions' value='Yes' />
+	</parameter>
+	<parameter name='OrganizationOwner' type='text' prompt='Organization' default='Processa'/>
+	<parameter name='OrganizationWebsite' type='text' prompt='Website' default='http://processa.com'/>
+	<parameter name='OrganizationAvatar' type='text' prompt='Avatar' default='http://processa.com/avatar.png'/>
   </parameters>
   <content>
-	<requireModule name="Pscx" minimumVersion="3.2.2" message="You need to install PowerShell Community Extensions (Pscx) module before continue."/>
-	<requireModule name="Pester" minimumVersion="3.4.3" message="You need to install Pester module before continue."/>
-	<requireModule name="PSProcessa" minimumVersion="1.5.0" message="You need to install PSProcessa module before continue."/>
-	<requireModule name="PlatyPS" minimumVersion="0.8.0" message="You need to install PlatyPS module before continue."/>
-	<requireModule name="PSScriptAnalyzer" minimumVersion="1.5.0" message="You need to install PSScriptAnalyzer module before continue."/>
-	<requireModule name="PSCodeHealth" minimumVersion="0.2.9" message="You need to install PSCodeHealth module before continue."/>
-	<requireModule name="NLog" minimumVersion="1.2.0" message="You need to install NLog module before continue."/>
+	<message>Checking required modules</message>
+	<requireModule name='Pscx' minimumVersion='3.2.2' message='You need to install PowerShell Community Extensions (Pscx) module before continue.'/>
+	<requireModule name='Pester' minimumVersion='3.4.3' message='You need to install Pester module before continue.'/>
+	<requireModule name='PSProcessa' minimumVersion='1.14.0' message='You need to install PSProcessa module before continue.'/>
+	<requireModule name='PlatyPS' minimumVersion='0.8.0' message='You need to install PlatyPS module before continue.'/>
+	<requireModule name='PSScriptAnalyzer' minimumVersion='1.5.0' message='You need to install PSScriptAnalyzer module before continue.'/>
+	<requireModule name='PSCodeHealth' minimumVersion='0.2.9' message='You need to install PSCodeHealth module before continue.'/>
+	<requireModule name='NLog' minimumVersion='1.2.0' message='You need to install NLog module before continue.'/>
+	<requireModule name='PSSQLite' minimumVersion='1.0.3' message='You need to install PSSQLite module before continue.'/>
 
-    <file source='' destination='bin\'/>
+	<message>Creating folder structure</message>
+  <file source='' destination='bin\'/>
 	<file source='' destination='Docs\'/>
 	<file source='' destination='Installer\'/>
 	<file source='' destination='Functions\'/>
@@ -34,29 +44,46 @@
 	<file source='' destination='Resources\'/>
 	<file source='' destination='SQLScripts\'/>
 	<file source='' destination='.vscode\'/>
+	<file source='' destination='SQLScripts\Schema' condition='$PLASTER_PARAM_SQLite -eq "Yes"'/>
 
-	<file source='Resources\Resources.psd1' destination='Resources\Resources.psd1'/>
-	<file source='SQLScripts\Get-Dummy.sql' destination='SQLScripts\Get-Dummy.sql'/>
-	<file source='Private-Functions.txt' destination='Private-Functions.txt'/>
-	<file source='Invoke-ScriptAnalyzer.ps1' destination='Invoke-ScriptAnalyzer.ps1'/>
-	<file source='Config.psd1' destination='Config.psd1'/>
-	<file source='Installer\Get-FunctionsToExport.ps1' destination='Installer\Get-FunctionsToExport.ps1'/>
-	<file source='.vscode\tasks.json' destination='.vscode\tasks.json'/>
+	<message>Creating files</message>
+	<file source='Resources\Resources.psd1' destination=''/>
+	<file source='SQLScripts\Get-Dummy.sql' destination=''/>
+	<file source='Private-Functions.txt' destination=''/>
+	<file source='Invoke-ScriptAnalyzer.ps1' destination=''/>
+	<file source='Config.psd1' destination=''/>
+	<file source='Installer\Get-FunctionsToExport.ps1' destination=''/>
+	<file source='.vscode\tasks.json' destination=''/>
+  <file source='SQLite\01.00.00.sql' destination='SQLScripts\Schema\01.00.00.sql' condition='$PLASTER_PARAM_SQLite -eq "Yes"'/>
 
 	<templateFile source='Template.psm1' destination='${PLASTER_PARAM_ModuleName}.psm1'/>
 	<templateFile source='Template-Format.ps1xml' destination='${PLASTER_PARAM_ModuleName}-Format.ps1xml'/>
 	<templateFile source='Template.psd1' destination='${PLASTER_PARAM_ModuleName}.psd1'/>
 
-	<templateFile source='ReleaseNotes.txt' destination='ReleaseNotes.txt'/>
-	<templateFile source='Startup.ps1' destination='Startup.ps1'/>
+	<templateFile source='ReleaseNotes.txt' destination=''/>
+	<templateFile source='Startup.ps1' destination=''/>
 
-	<templateFile source='Functions\Get-ConfigFile.ps1' destination='Functions\Get-ConfigFile.ps1'/>
-	<templateFile source='Functions\Get-ConfigPath.ps1' destination='Functions\Get-ConfigPath.ps1'/>
-	<templateFile source='Functions\Get-Configuration.ps1' destination='Functions\Get-Configuration.ps1'/>
-	<templateFile source='Functions\Set-Configuration.ps1' destination='Functions\Set-Configuration.ps1'/>
-	<templateFile source='Functions\Test-Configuration.ps1' destination='Functions\Test-Configuration.ps1'/>
-	<templateFile source='Docs\Invoke-Build.ps1' destination='Docs\Invoke-Build.ps1'/>
+	<templateFile source='Functions\Get-ConfigFile.ps1' destination=''/>
+	<templateFile source='Functions\Get-ConfigPath.ps1' destination=''/>
+	<templateFile source='Functions\Get-Configuration.ps1' destination=''/>
+	<templateFile source='Functions\Set-Configuration.ps1' destination=''/>
+	<templateFile source='Functions\Test-Configuration.ps1' destination=''/>
+	<templateFile source='Functions\Get-SqlScriptContent.ps1' destination=''/>
+	<templateFile source='Docs\Invoke-Build.ps1' destination=''/>
 	<templateFile source='Installer\Template.nuspec' destination='Installer\${PLASTER_PARAM_ModuleName}.nuspec'/>
-	<templateFile source='Installer\Create-Installer.ps1' destination='Installer\Create-Installer.ps1'/>
+	<templateFile source='Installer\Build.ps1' destination=''/>
+	<templateFile source='Installer\Invoke-Build.ps1' destination=''/>
+	<templateFile source='Pester\Get-Configuration.Tests.ps1' destination=''/>
+	<templateFile source='Pester\Set-Configuration.Tests.ps1' destination=''/>
+
+  <templateFile source='SQLite\Template.psm1' destination='${PLASTER_PARAM_ModuleName}.psm1' condition='$PLASTER_PARAM_SQLite -eq "Yes"'/>
+	<templateFile source='SQLite\Template.psd1' destination='${PLASTER_PARAM_ModuleName}.psd1' condition='$PLASTER_PARAM_SQLite -eq "Yes"'/>
+	<templateFile source='SQLite\Template-Format.ps1xml' destination='${PLASTER_PARAM_ModuleName}-Format.ps1xml' condition='$PLASTER_PARAM_SQLite -eq "Yes"'/>
+  <templateFile source='SQLite\Startup.ps1' destination='Startup.ps1' condition='$PLASTER_PARAM_SQLite -eq "Yes"'/>
+	<templateFile source='SQLite\Initialize-Database.ps1' destination='Functions\Initialize-Database.ps1' condition='$PLASTER_PARAM_SQLite -eq "Yes"'/>
+	<templateFile source='SQLite\Get-Configuration.ps1' destination='Functions\Get-Configuration.ps1' condition='$PLASTER_PARAM_SQLite -eq "Yes"'/>
+	<templateFile source='SQLite\Set-Configuration.ps1' destination='Functions\Set-Configuration.ps1' condition='$PLASTER_PARAM_SQLite -eq "Yes"'/>
+	<templateFile source='SQLite\Template.nuspec' destination='Installer\${PLASTER_PARAM_ModuleName}.nuspec' condition='$PLASTER_PARAM_SQLite -eq "Yes"'/>
+	<message>Done!!!</message>
   </content>
 </plasterManifest>

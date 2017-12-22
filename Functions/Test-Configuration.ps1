@@ -1,5 +1,5 @@
 function Test-Configuration {
-<#
+    <#
 .SYNOPSIS
 Verifica la información de los datos de configuración del módulo.
 
@@ -18,7 +18,8 @@ Test-Configuration -SaveFlag
 Verifica la configuración del módulo (conexiones y demás elementos definidos por el desarrollador). Si alguna verificación falla, establece el valor de *No configurado* en el archivo <%=$PLASTER_PARAM_ModuleName%>.config
 
 .INPUTS
-None
+Ninguno
+Esta función no acepta parámetros a través de la canalización,
 
 .LINK
 [Set-Configuration](Set-Configuration.md)
@@ -38,20 +39,24 @@ Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
 
     try {
 
-        $Configuration = Get-Configuration
+        $InformationAction = $PSBoundParameters | Get-DictionaryKey -Key 'InformationAction' -DefaultValue 'Continue'
+        $Configuration = (Get-Configuration)
         $MessageFormat = "[INFO] => {0}"
 
-		# Agregue sus valiadaciones y quite las "dummy"
+        # Agregue sus validaciones y quite las "dummy"
         $MessageFormat -f 'Connect-SqlLocal' | Write-Verbose
         Test-SqlConnection -ConnectionString $Configuration.MySqlDummyConnectionString | Out-Null
 
         if ($SaveFlag.IsPresent) {
             Set-AppSetting -Path $Script:AppConfig -Key 'configured' -Value '1'
+            $Script:ConfigurationCache = $null
         }
+        Write-Message -Title 'Testing Phase Succeed' -Message 'OK' -Type 'Success' -InformationAction $InformationAction
     }
     catch {
         Write-Log -ErrorRecord $PSItem
         Remove-AppSetting -Path $Script:AppConfig -Key 'configured'
-        throw
+        $Script:ConfigurationCache = $null
+        Write-Message -Title 'Testing Phase Failed' -Message ($PSItem.Exception.Message) -Type 'Error' -InformationAction $InformationAction
     }
 }

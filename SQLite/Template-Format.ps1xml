@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+    <ViewDefinitions>
+        <View>
+            <Name>ConfigInfo</Name>
+            <ViewSelectedBy>
+                <TypeName>Processa.Management.Automation.<%=$PLASTER_PARAM_ModuleName%>.Configuration</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <Label>Configurado?</Label>
+                                <PropertyName>Configured</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Archivo de configuraci&#243;n</Label>
+                                <PropertyName>AppConfig</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Archivo de base de datos</Label>
+                                <PropertyName>DatabaseFile</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Versi&#243;n de base de datos</Label>
+                                <PropertyName>DatabaseVersion</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>

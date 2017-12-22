@@ -1,49 +1,24 @@
-function Get-FileNameWithoutExtension {
-    [CmdletBinding()]
-    [OutputType([string])]
-    param(
-        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
-        [ValidateNotNullOrEmpty()]
-        [Alias('FullName')]
-        [string]
-        $InputObject,
+function Get-FunctionsToExport {
+<#
+.SYNOPSIS
+Genera la lista de funciones que se deben exportar (públicas) del módulo.
 
-        [string]
-        $LastItem,
+.EXAMPLE
+Get-FunctionsToExport
 
-        [switch]
-        $Enquote
+.NOTES
+Autor: <%=$PLASTER_PARAM_ModuleAuthor%>
+#>
 
-    )
-
-    begin {
-    }   
-
-    process {
-        foreach ($Item in $InputObject) {
-            $FileName = [System.IO.Path]::GetFileNameWithoutExtension($Item)
-
-            $Format = "{0}"
-
-            if ($Enquote.IsPresent) {
-                $Format = "'{0}',"
-                if ($LastItem -eq $FileName) {
-                    $Format = "'{0}'"
-                }
-            }
-
-            $Format -f $FileName | Write-Output
-            return
+    $PrivateFunctions = Get-Content -Path '..\Private-Functions.txt'
+    $FunctionsFiles = Get-ChildItem -Path '..\Functions' -Filter '*.ps1' | Sort-Object -Property 'Name'
+    for ($Index = 0; $Index -lt $FunctionsFiles.Count; $Index++) {
+        $FunctionName = [System.IO.Path]::GetFileNameWithoutExtension($FunctionsFiles[$Index])
+        if ($FunctionName -notin $PrivateFunctions) {
+            $Format = $Index | Invoke-Ternary -Condition {$PSItem -eq $FunctionsFiles.Count-1} -TrueBlock {"'{0}'"} -FalseBlock {"'{0}',"}
+            ($Format -f $FunctionName)
         }
-    } 
-    end {
     }
 }
 
-$PrivateFunctions = Get-Content -Path '..\Private-Functions.txt'
-$FunctionsToExport = Get-ChildItem -Path '..\Functions' -Filter '*.ps1' | Where-Object {($PSItem | Get-FileNameWithoutExtension) -notin $PrivateFunctions}
-$LastFunction = $FunctionsToExport | Select-Object -Property @{L = 'Name'; E = {$PSItem | Get-FileNameWithoutExtension}} -Last 1 
- 
-$FunctionsToExport | 
-    Select-Object -Property @{L = 'Name'; E = {$PSItem | Get-FileNameWithoutExtension -Enquote -LastItem ($LastFunction.Name)}} | 
-    Select-Object -ExpandProperty 'Name'    
+Get-FunctionsToExport
