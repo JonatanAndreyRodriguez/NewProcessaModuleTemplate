@@ -27,7 +27,10 @@ Task CreateNugetPackage -Depends UpdateModuleVersion {
     $OutputDirectory = Split-Path $NugetFilePath -Parent
     $CompileNugetCommand = '& "{0}" pack "{1}" -OutputDirectory "{2}"' -f $NugetCompiler, $NugetFilePath, $OutputDirectory
     Invoke-Expression -Command $CompileNugetCommand -OutVariable PackResult | Out-Null
+	$PackageFilePath = Join-Path -Path $PSScriptRoot -ChildPath ('{0}.{1}.nupkg' -f $ModuleName, $Script:ReleaseVersion)
     Write-Information -MessageData (-join($PackResult | Select-Object -Unique)) -InformationAction $InformationAction
+	Write-Information -MessageData $PackageFilePath -InformationAction $InformationAction
+	Assert (Test-Path -Path  $PackageFilePath) 'Error packing nupkg file. Check nuspec file'
 }
 
 Task UpdateModuleVersion -Depends GenerateModuleVersion {
