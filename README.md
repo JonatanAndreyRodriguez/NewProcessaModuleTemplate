@@ -15,7 +15,7 @@ Install-Module Plaster
 Import-Module Plaster
 ```
 
-3. Descargue y descomprima la plantilla desde la sección de [Releases](../../Release)
+3. Descargue y descomprima la plantilla desde la sección de [Releases](../../releases)
 
 4. Crear un proyecto utilizando la plantilla
 
