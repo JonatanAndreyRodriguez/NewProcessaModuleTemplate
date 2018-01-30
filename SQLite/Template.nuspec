@@ -20,7 +20,7 @@
 		<file src="Release\Functions\*.*" target="Functions"/>
 		<file src="Release\Resources\*.*" target="Resources"/>
 		<file src="Release\SQLScripts\*.sql" target="SQLScripts"/>
-		<file src="Release\SQLScripts\Schema\*.sql" target="SQLScripts"/>
+		<file src="Release\SQLScripts\Schema\*.sql" target="SQLScripts\Schema"/>
 		<file src="Release\<%=$PLASTER_PARAM_ModuleName%>.psd1"/>
 		<file src="Release\<%=$PLASTER_PARAM_ModuleName%>.psm1"/>
 		<file src="Release\<%=$PLASTER_PARAM_ModuleName%>-Format.ps1xml"/>
