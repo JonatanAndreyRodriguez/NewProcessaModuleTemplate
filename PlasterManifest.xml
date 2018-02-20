@@ -4,7 +4,7 @@
   <metadata>
     <name>ProcessaTemplate</name>
     <id>ceae0f9b-7c7b-403f-a99c-f9f859e236c7</id>
-    <version>2.0.2</version>
+    <version>2.0.3</version>
     <title>Processa PowerShell Template</title>
     <description>Creates files for a PowerShell module</description>
     <author>Atorrest</author>
@@ -69,6 +69,7 @@
 	<templateFile source='Functions\Set-Configuration.ps1' destination=''/>
 	<templateFile source='Functions\Test-Configuration.ps1' destination=''/>
 	<templateFile source='Functions\Get-SqlScriptContent.ps1' destination=''/>
+	<templateFile source='Functions\Set-CustomAlias.ps1' destination=''/>
 	<templateFile source='Docs\Invoke-Build.ps1' destination=''/>
 	<templateFile source='Installer\Template.nuspec' destination='Installer\${PLASTER_PARAM_ModuleName}.nuspec'/>
 	<templateFile source='Installer\Build.ps1' destination=''/>
